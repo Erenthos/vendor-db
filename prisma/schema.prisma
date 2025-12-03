@@ -1,1 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vendor {
+  id               String   @id @default(cuid())
+  name             String
+  domain           String
+  subDomain        String?
+  email            String   @unique
+  phone            String?
+  website          String?
+  city             String?
+  country          String?
+  techStack        String?
+  certifications   String?
+  partnerStatus    String?
+  experienceYears  Int?
+  employeeStrength Int?
+  status           VendorStatus @default(PENDING)
+  rating           Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum VendorStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
