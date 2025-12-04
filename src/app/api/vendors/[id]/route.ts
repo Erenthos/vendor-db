@@ -1,22 +1,35 @@
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-  const vendor = await prisma.vendor.findUnique({ where: { id: params.id } });
+// Loosen the context typing so it matches whatever Next expects internally
+export async function GET(_req: Request, context: any) {
+  const id = context?.params?.id as string;
+
+  const vendor = await prisma.vendor.findUnique({
+    where: { id },
+  });
+
   return NextResponse.json(vendor);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: any) {
+  const id = context?.params?.id as string;
   const body = await req.json();
+
   const updated = await prisma.vendor.update({
-    where: { id: params.id },
+    where: { id },
     data: body,
   });
+
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  await prisma.vendor.delete({ where: { id: params.id } });
+export async function DELETE(_req: Request, context: any) {
+  const id = context?.params?.id as string;
+
+  await prisma.vendor.delete({
+    where: { id },
+  });
+
   return NextResponse.json({ success: true });
 }
-
